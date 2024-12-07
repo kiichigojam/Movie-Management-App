@@ -1,16 +1,33 @@
-import Hero from "@/components/hero";
-import ConnectSupabaseSteps from "@/components/tutorial/connect-supabase-steps";
-import SignUpUserSteps from "@/components/tutorial/sign-up-user-steps";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
+import React from 'react';
 
-export default async function Index() {
+function hello() {
   return (
-    <>
-      <Hero />
-      <main className="flex-1 flex flex-col gap-6 px-4">
-        <h2 className="font-medium text-xl mb-4">Next steps</h2>
-        {hasEnvVars ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
-      </main>
-    </>
+    <section className="pt-64"> {/* Added padding-top to the section */}
+      <div className="mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8"> {/* Adjusted padding */}
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:items-center md:gap-8">
+          <div>
+            <div className="max-w-lg md:max-w-none">
+              <h2 className="text-2xl font-semibold text-gray-900 sm:text-3xl">
+                Movie Management App
+              </h2>
+
+              <p className="mt-4 text-gray-700">
+                Manage Your Movies Here!
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <img
+              src="/movie_photo.jpeg"
+              className="rounded w-96 h-auto"
+              alt=""
+            />
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
+
+export default hello;

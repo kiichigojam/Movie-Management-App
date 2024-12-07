@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Movie {
+  id          Int          @id @default(autoincrement())
+  title       String
+  releaseDate DateTime
+  rating      Float?
+  genreId     Int
+  directorId  Int
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  director    Director     @relation(fields: [directorId], references: [id])
+  genre       Genre        @relation(fields: [genreId], references: [id])
+  actors      MovieActor[] @relation("MovieActor_movie")
+
+  @@index([genreId])       // Index for filtering by genre
+  @@index([directorId])    // Index for filtering by director
+  @@index([releaseDate])   // Index for filtering by date range
+}
+
+model Genre {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  movies Movie[]
+
+  @@index([id])            // Index for joining with Movie
+}
+
+model Director {
+  id     Int     @id @default(autoincrement())
+  name   String  @unique
+  movies Movie[]
+
+  @@index([id])            // Index for joining with Movie
+}
+
+model Actor {
+  id     Int          @id @default(autoincrement())
+  name   String       @unique
+  movies MovieActor[] @relation("MovieActor_actor")
+
+  @@index([id])            // Index for joining with MovieActor
+}
+
+model MovieActor {
+  movieId Int
+  actorId Int
+  actor   Actor @relation("MovieActor_actor", fields: [actorId], references: [id])
+  movie   Movie @relation("MovieActor_movie", fields: [movieId], references: [id])
+
+  @@id([movieId, actorId]) // Composite primary key
+  @@index([movieId])       // Index for joins on movieId
+  @@index([actorId])       // Index for joins on actorId
+  @@index([movieId, actorId]) // Composite index for aggregations and joins
+}
