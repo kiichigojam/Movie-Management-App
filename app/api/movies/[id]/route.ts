@@ -5,9 +5,9 @@ import { prisma } from '@/lib/prisma';
 // GET method to fetch a single movie
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params } : { params: Promise<{ id : string }> }
 ) {
-  const movieId = Number(params.id);
+  const movieId = Number((await params).id);
 
   try {
     const movie = await prisma.movie.findUnique({
@@ -37,9 +37,9 @@ export async function GET(
 // PUT method to update a movie
 export async function PUT(
   request: Request,
-  { params }: { params: { id: string } }
+  { params } : { params: Promise<{ id : string }> }
 ) {
-  const movieId = Number(params.id);
+  const movieId = Number((await params).id);
 
   try {
     // Parse the request body
@@ -130,9 +130,9 @@ export async function PUT(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: { id: string } }
+  { params } : { params: Promise<{ id : string }> }
 ) {
-  const movieId = parseInt(params.id, 10);
+  const movieId = parseInt((await params).id, 10);
 
   if (isNaN(movieId)) {
     return NextResponse.json(
